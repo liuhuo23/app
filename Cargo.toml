@@ -1,8 +1,12 @@
 [workspace]
 resolver = "2"
-members = [ "ML_oroportion_anal", "data_structures", 
-    "my_macro"
-, "stu_app"]
+members = [
+    "walkfile",
+    "ML_oroportion_anal", 
+    "data_structures", 
+    "my_macro",   
+    "stu_app", 
+]
 
 [workspace.dependencies]
 anyhow = "1.0.86"
