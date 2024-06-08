@@ -28,7 +28,7 @@ fn main()->Result<()> {
 fn statistics_line(state: &mut HashMap<String, i32>, path: PathBuf)->Result<()>{
     for entry in fs::read_dir(path)?{
         let entry = entry?;
-        if is_hidden(entry.path()){
+        if is_hidden(&entry.path()){
             continue;
         }
         if entry.file_type()?.is_dir(){
@@ -72,7 +72,7 @@ fn write_lines(state: &mut HashMap<String, i32>, path: PathBuf, key: &String)-> 
     Ok(())
 }
 
-fn is_hidden(path: PathBuf)->bool{
+fn is_hidden(path: &PathBuf)->bool{
     // 以.开头的文件为隐藏文件 以.开头的文件为隐藏文件
     match path.file_name(){
         None => false,
@@ -86,4 +86,18 @@ fn is_hidden(path: PathBuf)->bool{
         }
     }
     
+}
+
+#[cfg(test)]
+mod test{
+    use std::{path::PathBuf, str::FromStr};
+
+    use crate::is_hidden;
+
+    #[test]
+    fn test_is_hidden(){
+        let path = PathBuf::from_str("./.vimrc").unwrap();
+        assert_eq!(false, is_hidden(&path));
+        assert_eq!(true, is_hidden(&path));
+    }
 }
