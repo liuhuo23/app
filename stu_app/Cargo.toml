@@ -5,3 +5,4 @@ edition = "2021"
 
 [dependencies]
 my_macro ={ path = "../my_macro"}
+walkfile = {path = "../walkfile"}
