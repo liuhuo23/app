@@ -20,7 +20,7 @@ fn main()->Result<()> {
         return Ok(());
     }
     for (k, v) in state.iter(){
-        println!("{}有{} 占比 {}", k, v, format!("{:.2}%", v / values * 100));
+        println!("{}有{}行占比 {}", k, v, format!("{:.2}%", (*v as f64) / (values as f64) * 100.0));
     }
     Ok(())
 }
@@ -28,6 +28,9 @@ fn main()->Result<()> {
 fn statistics_line(state: &mut HashMap<String, i32>, path: PathBuf)->Result<()>{
     for entry in fs::read_dir(path)?{
         let entry = entry?;
+        if is_hidden(entry.path()){
+            continue;
+        }
         if entry.file_type()?.is_dir(){
             statistics_line(state, entry.path())?;
         }
@@ -67,4 +70,20 @@ fn write_lines(state: &mut HashMap<String, i32>, path: PathBuf, key: &String)-> 
         state.insert(key.clone(), v);
     }
     Ok(())
+}
+
+fn is_hidden(path: PathBuf)->bool{
+    // 以.开头的文件为隐藏文件 以.开头的文件为隐藏文件
+    match path.file_name(){
+        None => false,
+        Some(p) => {
+            let temp = p.to_str().unwrap_or_default();
+            let temp = String::from(temp);
+            if temp.starts_with("."){
+                return true
+            }
+            return false
+        }
+    }
+    
 }
